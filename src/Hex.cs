@@ -15,7 +15,6 @@ namespace HexGame
         public int R { get; private set; } //row
         public int S { get; private set; }
         public Model @Model { get; private set; }
-        public Vector3 ColorVector { get; set; }
         private static float WidthMultiplier = (float)Math.Sqrt(3) / 2;
 
         public Hex(int q, int r, Model model)
@@ -24,16 +23,6 @@ namespace HexGame
             this.R = r;
             this.S = -(q + r);
             this.Model = model;
-            this.ColorVector = Color.Green.ToVector3();
-        }
-
-        public Hex(int q, int r, Model model, Vector3 color)
-        {
-            this.Q = q;
-            this.R = r;
-            this.S = -(q + r);
-            this.Model = model;
-            this.ColorVector = color;
         }
 
         public Vector3 GetPosition()
@@ -53,9 +42,6 @@ namespace HexGame
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.EnableDefaultLighting();
-                    effect.DiffuseColor = ColorVector;
-                    effect.AmbientLightColor = ColorVector;
                     effect.View = view;
                     effect.Projection = projection;
                     effect.World = Matrix.CreateWorld(GetPosition(), Vector3.Forward, Vector3.Up);

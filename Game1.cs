@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -41,8 +40,7 @@ namespace HexGame
             {
                 for (var row = 0; row < 10; row++)
                 {
-                    var rnd = new Random();
-                    var hex = new Hex(colummn, row, model, new Vector3(rnd.Next(0, 255), rnd.Next(0, 255), rnd.Next(0, 255)));
+                    var hex = new Hex(colummn, row, model);
                     hexes.Add(hex);
                 }
             }
@@ -75,8 +73,6 @@ namespace HexGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
-
             Matrix invertY = Matrix.CreateScale(1, -1, 1);
 
             basicEffect.World = invertY;
@@ -87,11 +83,17 @@ namespace HexGame
             {
                 Vector3 viewSpaceTextPosition = Vector3.Transform(hex.GetPosition(), cam.View * invertY);
                 hex.Draw(gameTime, GraphicsDevice, cam.View, cam.Projection);
+            _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
                 _spriteBatch.DrawString(font, $"({hex.Q}, {hex.R})", new Vector2(viewSpaceTextPosition.X, viewSpaceTextPosition.Y), Color.Black, 0, font.MeasureString($"({hex.Q}, {hex.R})") / 2, 0.025f, 0, viewSpaceTextPosition.Z);
+            _spriteBatch.End();
             }
 
+            var h = new Hex(100, 100, model);
+            h.Draw(gameTime, GraphicsDevice, cam.View, cam.Projection);
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(font, $"Mouse X: {Mouse.GetState().X}", new Vector2(5, 5), Color.Black);
+            _spriteBatch.DrawString(font, $"Mouse Y: {Mouse.GetState().Y}", new Vector2(5, 22), Color.Black);
             _spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }
