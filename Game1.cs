@@ -14,6 +14,7 @@ namespace HexGame
         private Camera cam;
         private List<Hex> hexes = new List<Hex>();
         private SpriteFont font;
+        private BasicEffect basicEffect;
 
         public Game1()
         {
@@ -27,6 +28,7 @@ namespace HexGame
             base.Initialize();
 
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.BlendState = BlendState.AlphaBlend;
 
             cam = new Camera(GraphicsDevice, this.Window);
             cam.Position = new Vector3(0, 0, 10);
@@ -49,6 +51,12 @@ namespace HexGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            basicEffect = new BasicEffect(GraphicsDevice)
+            {
+                TextureEnabled = true,
+                VertexColorEnabled = true,
+            };
         }
 
         protected override void Update(GameTime gameTime)
@@ -66,15 +74,21 @@ namespace HexGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin();
+
+            _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, basicEffect);
+
+            Matrix invertY = Matrix.CreateScale(1, -1, 1);
+
+            basicEffect.World = invertY;
+            basicEffect.View = Matrix.Identity;
+            basicEffect.Projection = cam.Projection;
 
             foreach (var hex in hexes)
             {
+                Vector3 viewSpaceTextPosition = Vector3.Transform(hex.GetPosition(), cam.View * invertY);
                 hex.Draw(gameTime, GraphicsDevice, cam.View, cam.Projection);
+                _spriteBatch.DrawString(font, $"({hex.Q}, {hex.R})", new Vector2(viewSpaceTextPosition.X, viewSpaceTextPosition.Y), Color.Black, 0, font.MeasureString($"({hex.Q}, {hex.R})") / 2, 0.025f, 0, viewSpaceTextPosition.Z);
             }
-
-            _spriteBatch.DrawString(font, cam.View.Translation.ToString(), new Vector2(100, 100), Color.Black);
-            _spriteBatch.DrawString(font, cam.Projection.Translation.ToString(), new Vector2(100, 200), Color.Black);
 
             _spriteBatch.End();
 
