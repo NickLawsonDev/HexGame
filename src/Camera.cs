@@ -24,8 +24,6 @@ namespace  HexGame
     public float nearClipPlane = .05f;
     public float farClipPlane = 2000f;
 
-    private float yMouseAngle = 0f;
-    private float xMouseAngle = 0f;
     private bool mouseLookIsUsed = false;
 
     private int fpsKeyboardLayout = 0;
