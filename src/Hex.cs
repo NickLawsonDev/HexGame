@@ -47,7 +47,7 @@ namespace HexGame
             return new Vector3(horizantalSpacing * (Q + R / 2f), 0, verticalSpacing * R);
         }
 
-        public void Draw(GameTime gameTime, GraphicsDevice graphicsDevice)
+        public void Draw(GameTime gameTime, GraphicsDevice graphicsDevice, Matrix view, Matrix projection)
         {
             foreach (ModelMesh mesh in this.Model.Meshes)
             {
@@ -56,6 +56,8 @@ namespace HexGame
                     effect.EnableDefaultLighting();
                     effect.DiffuseColor = ColorVector;
                     effect.AmbientLightColor = ColorVector;
+                    effect.View = view;
+                    effect.Projection = projection;
                     effect.World = Matrix.CreateWorld(GetPosition(), Vector3.Forward, Vector3.Up);
                 }
                 mesh.Draw();

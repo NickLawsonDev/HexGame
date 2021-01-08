@@ -26,7 +26,7 @@ namespace HexGame
         {
             base.Initialize();
 
-            this.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             cam = new Camera(GraphicsDevice, this.Window);
             cam.Position = new Vector3(0, 0, 10);
@@ -70,7 +70,7 @@ namespace HexGame
 
             foreach (var hex in hexes)
             {
-                hex.Draw(gameTime, GraphicsDevice);
+                hex.Draw(gameTime, GraphicsDevice, cam.View, cam.Projection);
             }
 
             _spriteBatch.DrawString(font, cam.View.Translation.ToString(), new Vector2(100, 100), Color.Black);
