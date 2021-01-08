@@ -70,7 +70,7 @@ namespace HexGame
 
             foreach (var hex in hexes)
             {
-                hex.Draw(gameTime, GraphicsDevice, cam.View, cam.Projection);
+                hex.Draw(gameTime, GraphicsDevice);
             }
 
             _spriteBatch.DrawString(font, cam.View.Translation.ToString(), new Vector2(100, 100), Color.Black);
